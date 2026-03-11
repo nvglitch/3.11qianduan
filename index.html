@@ -388,17 +388,25 @@
             background: radial-gradient(circle, rgba(102, 252, 241, 0.25) 0%, rgba(0, 192, 192, 0.15) 40%, transparent 65%);
             filter: blur(80px);
             z-index: 0;
-            animation: pulse 8s ease-in-out infinite;
+            animation: combinePulseAndMove 12s ease-in-out infinite;
         }
 
-        @keyframes pulse {
+        @keyframes combinePulseAndMove {
             0%, 100% {
-                transform: translate(-50%, -50%) scale(1);
+                transform: translate(-50%, -50%) scale(1) translateX(0);
                 opacity: 0.7;
             }
+            25% {
+                transform: translate(-50%, -50%) scale(1.1) translateX(30px);
+                opacity: 0.85;
+            }
             50% {
-                transform: translate(-50%, -50%) scale(1.15);
+                transform: translate(-50%, -50%) scale(1.15) translateX(0);
                 opacity: 1;
+            }
+            75% {
+                transform: translate(-50%, -50%) scale(1.1) translateX(-30px);
+                opacity: 0.85;
             }
         }
 
@@ -1146,6 +1154,36 @@
             background: var(--accent-primary);
             color: var(--bg-dark);
         }
+
+        /* ========================================
+           Scroll Reveal 动画效果
+           ======================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .reveal-delay-4 {
+            transition-delay: 0.4s;
+        }
     </style>
 </head>
 <body>
@@ -1199,16 +1237,16 @@
     <section class="product-carousel-section" id="carousel">
         <div class="carousel-container">
             <div class="carousel-slide active">
-                <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2FMC12.png&nonce=031dfea2-d01e-455b-989f-d2568d266971&project_id=7610312908712050726&sign=13604b0e2b2803a34c88532e2517cc4d18131d48d7245c05997b5b568347547d" alt="MC12">
+                <img src="./assets/MC12.png" alt="MC12">
             </div>
             <div class="carousel-slide">
-                <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2FMCIPC9.png&nonce=0ad0c375-81a0-4a4a-9958-502b7397d829&project_id=7610312908712050726&sign=65ef880d2ad6514ec426fdd7c674119bd06fa9a5eb56b3e1889aefc9cdf05d2f" alt="MCIPC9">
+                <img src="./assets/MCIPC9.png" alt="MCIPC9">
             </div>
             <div class="carousel-slide">
-                <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2FMCNAS12.png&nonce=0f4b743f-c101-4197-88d8-49fd300d0d55&project_id=7610312908712050726&sign=8fd00495dd9293ac1f85c0cff403923c051055bc884eb706e5ead8d365a3ce20" alt="MCNAS12">
+                <img src="./assets/MCNAS12.png" alt="MCNAS12">
             </div>
             <div class="carousel-slide">
-                <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2FMCSRP5.png&nonce=ab113bbc-46c7-4a39-975d-b5d91895888d&project_id=7610312908712050726&sign=9d2a38fbab5c60c17026e494899c053fcabf43be98276ae6a9cb98e75ea7f374" alt="MCSRP5">
+                <img src="./assets/MCSRP5.png" alt="MCSRP5">
             </div>
 
             <!-- 左右箭头按钮 -->
@@ -1244,21 +1282,22 @@
     <!-- 公司介绍板块 -->
     <section class="company-intro" id="company">
         <div class="section-header">
-            <p class="section-label">// MAGIC CHIP</p>
+            <p class="section-label">// INTRODUCTION</p>
             <h2 class="section-title">OUR COMPANY</h2>
         </div>
 
-        <div class="company-content">
+        <div class="company-content reveal">
             <div class="company-image">
-                <img src="https://placehold.co/800x600/1a1a1a/66FCF1?text=COMPANY+IMAGE" alt="Company Overview">
+                <img src="./assets/company.png" alt="Company Overview">
             </div>
             <div class="company-text">
-                <p class="company-code">> ESTABLISHED: 2024</p>
+                <p class="company-code">> ESTABLISHED: 2021</p>
                 <h3 class="company-subtitle">Innovation at the Core</h3>
                 <p class="company-desc">
-                    Magic Chip is a leading technology company specializing in high-performance computing solutions.
-                    Our mission is to deliver cutting-edge mini PC products that combine power, efficiency, and elegant design.
-                    With a team of dedicated engineers and designers, we push the boundaries of what's possible in compact computing.
+                    We are dedicated to delivering top-notch computer hardware products 
+                    and solutions to users ranging from families to individual and businesses, 
+                    by leveraging the power of made-in-China, we strive to offer the best quality 
+                    and cost effective products to our valued customers.
                 </p>
                 <p class="company-desc">
                     From advanced thermal management to next-generation processors, every Magic Chip product is engineered
@@ -1276,8 +1315,8 @@
             <h2 class="section-title">MINI PC PRODUCT</h2>
         </div>
 
-        <div class="feature-grid">
-            <article class="feature-card">
+        <div class="feature-grid reveal">
+            <article class="feature-card reveal reveal-delay-1">
                 <img src="https://placehold.co/600x375/1a1a1a/66FCF1?text=THERMAL+SYSTEM" alt="散热系统" class="feature-image">
                 <div class="feature-content">
                     <p class="feature-code">> COOLING: LIQUID_METAL</p>
@@ -1286,7 +1325,7 @@
                 </div>
             </article>
 
-            <article class="feature-card">
+            <article class="feature-card reveal reveal-delay-2">
                 <img src="https://placehold.co/600x375/1a1a1a/FFA500?text=CPU+CHIP" alt="处理器" class="feature-image">
                 <div class="feature-content">
                     <p class="feature-code">> CPU: 16_CORE_32_THREAD</p>
@@ -1295,7 +1334,7 @@
                 </div>
             </article>
 
-            <article class="feature-card">
+            <article class="feature-card reveal reveal-delay-3">
                 <img src="https://placehold.co/600x375/1a1a1a/66FCF1?text=GPU+MODULE" alt="显卡" class="feature-image">
                 <div class="feature-content">
                     <p class="feature-code">> GPU: RTX_ON</p>
@@ -1304,7 +1343,7 @@
                 </div>
             </article>
 
-            <article class="feature-card">
+            <article class="feature-card reveal reveal-delay-4">
                 <img src="https://placehold.co/600x375/1a1a1a/FFA500?text=MEMORY" alt="内存" class="feature-image">
                 <div class="feature-content">
                     <p class="feature-code">> RAM: 64GB_DDR5</p>
@@ -1313,7 +1352,7 @@
                 </div>
             </article>
 
-            <article class="feature-card">
+            <article class="feature-card reveal reveal-delay-1">
                 <img src="https://placehold.co/600x375/1a1a1a/66FCF1?text=STORAGE" alt="存储" class="feature-image">
                 <div class="feature-content">
                     <p class="feature-code">> STORAGE: NVME_GEN4</p>
@@ -1322,7 +1361,7 @@
                 </div>
             </article>
 
-            <article class="feature-card">
+            <article class="feature-card reveal reveal-delay-2">
                 <img src="https://placehold.co/600x375/1a1a1a/FFA500?text=CONNECTIVITY" alt="连接性" class="feature-image">
                 <div class="feature-content">
                     <p class="feature-code">> IO: FULL_SPECTRUM</p>
@@ -1335,7 +1374,7 @@
 
     <!-- 参数规格表 -->
     <section class="specs" id="specs">
-        <div class="specs-container">
+        <div class="specs-container reveal">
             <div class="section-header">
                 <p class="section-label">// Technical Specifications</p>
                 <h2 class="section-title">System Parameters</h2>
@@ -1659,6 +1698,28 @@
                 el.style.willChange = 'auto';
             });
         });
+
+        // ========================================
+        // Scroll Reveal 滚动显示动画
+        // ========================================
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        document.addEventListener('DOMContentLoaded', initScrollReveal);
 
     </script>
 </body>
