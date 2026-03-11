@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shenzhen Magic Chip Co., Ltd.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ========================================
+           CSS 变量定义 - 视觉设计系统
+           ======================================== */
+        :root {
+            /* 核心颜色 */
+            --bg-dark: #1a1a1a;
+            --text-main: #C5C6C7;
+            --accent-primary: #66FCF1;
+            --accent-warning: #FFA500;
+            
+            /* SMPTE 彩条渐变 */
+            --smpte-gradient: linear-gradient(90deg, 
+                #c0c0c0 14.28%, 
+                #c0c000 14.28% 28.56%, 
+                #00c0c0 28.56% 42.84%, 
+                #00c000 42.84% 57.12%, 
+                #c000c0 57.12% 71.4%, 
+                #c00000 71.4% 85.68%, 
+                #0000c0 85.68%
+            );
+            
+            /* 辅助色 */
+            --bg-card: rgba(11, 12, 16, 0.85);
+            --border-subtle: rgba(197, 198, 199, 0.2);
+            --border-glow: rgba(102, 252, 241, 0.5);
+            --scanline: rgba(0, 0, 0, 0.3);
+            
+            /* 字体 */
+            --font-display: 'Oswald', Impact, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+            
+            /* 间距 */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
+            --space-xl: 4rem;
+            --space-2xl: 6rem;
+            
+            /* 动画 */
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        /* ========================================
+           全局重置与基础样式
+           ======================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ========================================
+           悬浮胶囊导航 (Floating Pill Header)
+           ======================================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: var(--space-sm);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(11, 12, 16, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* 安全框装饰 */
+        .header::before,
+        .header::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--border-subtle);
+            pointer-events: none;
+        }
+
+        .header::before {
+            top: var(--space-xs);
+            left: var(--space-xs);
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .header::after {
+            top: var(--space-xs);
+            right: var(--space-xs);
+            border-left: none;
+            border-bottom: none;
+        }
+
+        /* 左侧品牌区域 */
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            margin-left: var(--space-md);
+        }
+
+        .logo {
+            display: block;
+            height: 48px;
+            transition: all var(--transition-fast);
+            filter: brightness(0) saturate(100%) invert(80%) sepia(5%) saturate(100%) hue-rotate(180deg);
+        }
+
+        .logo img {
+            height: 100%;
+            width: auto;
+            display: block;
+        }
+
+        .logo:hover {
+            filter: brightness(0) saturate(100%) invert(80%) sepia(50%) saturate(500%) hue-rotate(130deg) drop-shadow(0 0 8px var(--accent-primary));
+        }
+
+        .brand-icons {
+            display: flex;
+            gap: var(--space-xs);
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-subtle);
+            background: rgba(11, 12, 16, 0.8);
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .brand-icon:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            box-shadow: 0 0 10px var(--border-glow);
+        }
+
+        .brand-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 右侧胶囊导航 */
+        .nav-pill {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: rgba(11, 12, 16, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 50px;
+            padding: var(--space-xs) var(--space-sm);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border-radius: 50%;
+        }
+
+        .nav-toggle:hover {
+            background: rgba(102, 252, 241, 0.1);
+            color: var(--accent-primary);
+        }
+
+        .nav-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .nav-link {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: var(--text-main);
+            text-decoration: none;
+            text-transform: uppercase;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: 25px;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-primary);
+            background: rgba(102, 252, 241, 0.1);
+            text-shadow: 0 0 8px var(--accent-primary);
+        }
+
+        .nav-search {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border-radius: 50%;
+        }
+
+        .nav-search:hover {
+            background: rgba(102, 252, 241, 0.1);
+            color: var(--accent-primary);
+        }
+
+        .nav-search svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 移动端菜单遮罩 */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 12, 16, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-lg);
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu-link {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--text-main);
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: all var(--transition-fast);
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--accent-primary);
+            text-shadow: 0 0 20px var(--accent-primary);
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: var(--space-md);
+            right: var(--space-md);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .mobile-menu-close:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        /* ========================================
+           REC 录制指示器 - 位于 brand 区域
+           ======================================== */
+        .rec-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            margin-top: 8px;
+        }
+
+        .rec-dot {
+            width: 10px;
+            height: 10px;
+            background: #ff0000;
+            border-radius: 50%;
+            animation: recBlink 1s ease-in-out infinite;
+            box-shadow: 0 0 8px #ff0000, 0 0 16px #ff0000;
+        }
+
+        @keyframes recBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .rec-text {
+            color: #ff0000;
+            font-weight: 600;
+        }
+
+        .timecode {
+            color: var(--text-main);
+            margin-left: var(--space-xs);
+            font-size: 0.7rem;
+        }
+
+        /* ========================================
+           产品轮播图区域 (Hero)
+           ======================================== */
+        .product-carousel-section {
+            width: 100%;
+            height: 100vh;
+            margin-top: 0;
+            padding-top: 60px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        /* 幻灯片背景发光球 */
+        .product-carousel-section::before {
+            content: '';
+            position: absolute;
+            width: 1200px;
+            height: 1200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(102, 252, 241, 0.25) 0%, rgba(0, 192, 192, 0.15) 40%, transparent 65%);
+            filter: blur(80px);
+            z-index: 0;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.15);
+                opacity: 1;
+            }
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 97%;
+            height: auto;
+            max-height: 85%;
+            opacity: 0;
+            z-index: 1;
+            transition: opacity 0.8s ease-in-out, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border-radius: 20px;
+            border: 2px solid var(--border-subtle);
+            overflow: hidden;
+        }
+
+        .carousel-slide:hover {
+            border-color: var(--accent-primary);
+            box-shadow:
+                0 0 20px var(--border-glow),
+                0 0 40px rgba(102, 252, 241, 0.3),
+                0 0 60px rgba(102, 252, 241, 0.2);
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            z-index: 10;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        /* 进度条分页器 - 内置黑色底 */
+        .carousel-progress {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            z-index: 50;
+            padding: 16px 24px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--accent-primary);
+            border-radius: 50px;
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar {
+            width: 80px;
+            height: 4px;
+            background: rgba(197, 198, 199, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .progress-bar:hover {
+            background: rgba(197, 198, 199, 0.6);
+        }
+
+        .progress-bar.active {
+            background: rgba(102, 252, 241, 0.3);
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--accent-primary);
+            box-shadow: 0 0 10px var(--accent-primary);
+            transition: width 0.1s linear;
+        }
+
+        .progress-bar.active .progress-fill {
+            animation: progressFill 5s linear forwards;
+        }
+
+        .progress-bar.active.paused .progress-fill {
+            animation-play-state: paused;
+        }
+
+        @keyframes progressFill {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* 轮播箭头按钮 */
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border: 2px solid var(--border-subtle);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 40;
+            transition: all 0.3s ease;
+            color: var(--text-main);
+        }
+
+        .carousel-arrow:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow:
+                0 0 20px var(--border-glow),
+                0 0 40px rgba(102, 252, 241, 0.3);
+        }
+
+        .carousel-arrow.prev {
+            left: 40px;
+        }
+
+        .carousel-arrow.next {
+            right: 40px;
+        }
+
+        .carousel-arrow svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .carousel-slide {
+                width: 95%;
+                max-height: 80%;
+                border-radius: 16px;
+            }
+
+            .carousel-progress {
+                padding: 14px 20px;
+                gap: 14px;
+            }
+
+            .progress-bar {
+                width: 60px;
+                height: 3px;
+            }
+
+            .carousel-arrow {
+                width: 45px;
+                height: 45px;
+            }
+
+            .carousel-arrow.prev {
+                left: 30px;
+            }
+
+            .carousel-arrow.next {
+                right: 30px;
+            }
+
+            .carousel-arrow svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .carousel-slide {
+                width: 93%;
+                max-height: 75%;
+                border-radius: 12px;
+                border-width: 1.5px;
+            }
+
+            .carousel-progress {
+                padding: 12px 16px;
+                gap: 10px;
+                bottom: 30px;
+            }
+
+            .progress-bar {
+                width: 40px;
+                height: 3px;
+            }
+
+            .carousel-arrow {
+                width: 40px;
+                height: 40px;
+            }
+
+            .carousel-arrow.prev {
+                left: 20px;
+            }
+
+            .carousel-arrow.next {
+                right: 20px;
+            }
+
+            .carousel-arrow svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carousel-slide {
+                width: 90%;
+                max-height: 70%;
+                border-radius: 10px;
+                border-width: 1px;
+            }
+
+            .carousel-progress {
+                padding: 10px 14px;
+                gap: 8px;
+                bottom: 20px;
+            }
+
+            .progress-bar {
+                width: 32px;
+                height: 2px;
+            }
+
+            .carousel-arrow {
+                width: 36px;
+                height: 36px;
+            }
+
+            .carousel-arrow.prev {
+                left: 15px;
+            }
+
+            .carousel-arrow.next {
+                right: 15px;
+            }
+
+            .carousel-arrow svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        /* ========================================
+           核心卖点网格 (Feature Grid)
+           ======================================== */
+        /* 公司介绍板块 */
+        .company-intro {
+            padding: var(--space-2xl) var(--space-md);
+            position: relative;
+            background: linear-gradient(135deg, rgba(11, 12, 16, 0.95) 0%, rgba(26, 26, 26, 0.95) 100%);
+        }
+
+        .company-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-xl);
+            align-items: center;
+        }
+
+        .company-image {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid var(--border-subtle);
+            transition: all 0.3s ease;
+        }
+
+        .company-image:hover {
+            border-color: var(--accent-primary);
+            box-shadow:
+                0 0 20px var(--border-glow),
+                0 0 40px rgba(102, 252, 241, 0.3);
+        }
+
+        .company-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .company-text {
+            padding: var(--space-lg);
+        }
+
+        .company-code {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+            margin-bottom: var(--space-sm);
+            letter-spacing: 0.1em;
+        }
+
+        .company-subtitle {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: var(--space-md);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .company-desc {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--text-main);
+            margin-bottom: var(--space-md);
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .company-content {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+            }
+
+            .company-subtitle {
+                font-size: 1.5rem;
+            }
+
+            .company-desc {
+                font-size: 0.85rem;
+            }
+        }
+
+        .features {
+            padding: var(--space-2xl) var(--space-md);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            margin-bottom: var(--space-sm);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-main);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-md);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 0;
+            overflow: hidden;
+            transition: all var(--transition-normal);
+            position: relative;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px solid transparent;
+            transition: border-color var(--transition-normal);
+            pointer-events: none;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .feature-card:hover::before {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 30px var(--border-glow), inset 0 0 30px rgba(102, 252, 241, 0.05);
+        }
+
+        .feature-image {
+            width: 100%;
+            aspect-ratio: 16/10;
+            object-fit: cover;
+            filter: grayscale(30%) contrast(1.1);
+            transition: filter var(--transition-normal);
+        }
+
+        .feature-card:hover .feature-image {
+            filter: grayscale(0%) contrast(1.2);
+        }
+
+        .feature-content {
+            padding: var(--space-md);
+        }
+
+        .feature-code {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            color: var(--accent-warning);
+            margin-bottom: var(--space-xs);
+            text-transform: uppercase;
+        }
+
+        .feature-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-main);
+            margin-bottom: var(--space-xs);
+        }
+
+        .feature-desc {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            color: var(--text-main);
+            opacity: 0.7;
+            line-height: 1.6;
+        }
+
+        /* 角落装饰 */
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            width: 20px;
+            height: 20px;
+            border-right: 2px solid var(--border-subtle);
+            border-bottom: 2px solid var(--border-subtle);
+            transition: border-color var(--transition-normal);
+        }
+
+        .feature-card:hover::after {
+            border-color: var(--accent-primary);
+        }
+
+        /* ========================================
+           参数规格表 (Tech Specs)
+           ======================================== */
+        .specs {
+            padding: var(--space-2xl) var(--space-md);
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+        }
+
+        .specs-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .specs-table-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card);
+        }
+
+        .specs-table {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+        }
+
+        .specs-header {
+            background: rgba(102, 252, 241, 0.1);
+            border-bottom: 2px solid var(--accent-primary);
+        }
+
+        .specs-header th {
+            padding: var(--space-md);
+            text-align: left;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent-primary);
+            white-space: nowrap;
+        }
+
+        .specs-row {
+            border-bottom: 1px solid var(--border-subtle);
+            transition: background var(--transition-fast);
+        }
+
+        .specs-row:nth-child(even) {
+            background: rgba(197, 198, 199, 0.03);
+        }
+
+        .specs-row:hover {
+            background: rgba(102, 252, 241, 0.05);
+        }
+
+        .specs-row td {
+            padding: var(--space-sm) var(--space-md);
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        .specs-row td:first-child {
+            color: var(--accent-warning);
+            font-weight: 500;
+        }
+
+        .spec-value {
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+        }
+
+        .spec-unit {
+            color: var(--text-main);
+            opacity: 0.6;
+            font-size: 0.75rem;
+            margin-left: 0.25em;
+        }
+
+        /* 表格滚动提示 */
+        .table-hint {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-main);
+            opacity: 0.5;
+            margin-top: var(--space-sm);
+            justify-content: center;
+        }
+
+        .table-hint svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ========================================
+           页脚
+           ======================================== */
+        .footer {
+            padding: var(--space-xl) var(--space-md);
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--text-main);
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-text {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-main);
+            opacity: 0.6;
+            letter-spacing: 0.1em;
+        }
+
+        .footer-bar {
+            width: 100%;
+            height: 2px;
+            background: var(--smpte-gradient);
+            margin-top: var(--space-lg);
+        }
+
+        /* ========================================
+           响应式设计 - 桌面端扩展
+           ======================================== */
+        @media (min-width: 768px) {
+            .nav-toggle {
+                display: none;
+            }
+
+            .nav-links {
+                display: flex;
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .mobile-menu {
+                display: none !important;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .header {
+                padding: var(--space-md) var(--space-lg);
+            }
+
+            .nav-pill {
+                padding: var(--space-xs) var(--space-md);
+                gap: var(--space-sm);
+            }
+
+            .nav-link {
+                font-size: 0.8125rem;
+                padding: var(--space-xs) var(--space-md);
+            }
+
+            .features,
+            .specs {
+                padding: var(--space-2xl) var(--space-xl);
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .feature-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* ========================================
+           随机故障动画类
+           ======================================== */
+        .glitch-active {
+            animation: glitch-shake 0.3s ease-in-out;
+        }
+
+        @keyframes glitch-shake {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 1px); }
+            40% { transform: translate(2px, -1px); }
+            60% { transform: translate(-1px, 2px); }
+            80% { transform: translate(1px, -2px); }
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-subtle);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        /* 选择文本样式 */
+        ::selection {
+            background: var(--accent-primary);
+            color: var(--bg-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- 悬浮胶囊导航 -->
+    <header class="header">
+        <div class="brand">
+            <a href="#" class="logo"><img src="assets/logo.png" alt="SIGNAL_0"></a>
+            <div class="rec-indicator">
+                <span class="rec-dot"></span>
+                <span class="rec-text">REC</span>
+                <span class="timecode" id="timecode">00:00:00:00</span>
+            </div>
+        </div>
+
+        <nav class="nav-pill">
+            <button class="nav-toggle" id="navToggle" aria-label="菜单">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#specs" class="nav-link">Specs</a>
+                <a href="#gallery" class="nav-link">Gallery</a>
+            </div>
+            <button class="nav-search" aria-label="搜索">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+            </button>
+        </nav>
+    </header>
+
+    <!-- 移动端菜单 -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" id="mobileMenuClose" aria-label="关闭菜单">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <a href="#features" class="mobile-menu-link">Features</a>
+        <a href="#specs" class="mobile-menu-link">Specs</a>
+        <a href="#gallery" class="mobile-menu-link">Gallery</a>
+    </div>
+
+    <!-- 产品轮播图区域 (Hero) -->
+    <section class="product-carousel-section" id="carousel">
+        <div class="carousel-container">
+            <div class="carousel-slide active">
+                <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2FMC12.png&nonce=031dfea2-d01e-455b-989f-d2568d266971&project_id=7610312908712050726&sign=13604b0e2b2803a34c88532e2517cc4d18131d48d7245c05997b5b568347547d" alt="MC12">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2FMCIPC9.png&nonce=0ad0c375-81a0-4a4a-9958-502b7397d829&project_id=7610312908712050726&sign=65ef880d2ad6514ec426fdd7c674119bd06fa9a5eb56b3e1889aefc9cdf05d2f" alt="MCIPC9">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2FMCNAS12.png&nonce=0f4b743f-c101-4197-88d8-49fd300d0d55&project_id=7610312908712050726&sign=8fd00495dd9293ac1f85c0cff403923c051055bc884eb706e5ead8d365a3ce20" alt="MCNAS12">
+            </div>
+            <div class="carousel-slide">
+                <img src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2FMCSRP5.png&nonce=ab113bbc-46c7-4a39-975d-b5d91895888d&project_id=7610312908712050726&sign=9d2a38fbab5c60c17026e494899c053fcabf43be98276ae6a9cb98e75ea7f374" alt="MCSRP5">
+            </div>
+
+            <!-- 左右箭头按钮 -->
+            <button class="carousel-arrow prev" id="prevBtn" aria-label="上一张">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <button class="carousel-arrow next" id="nextBtn" aria-label="下一张">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+
+            <!-- 进度条分页器 -->
+            <div class="carousel-progress">
+                <div class="progress-bar active" data-index="0">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-bar" data-index="1">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-bar" data-index="2">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-bar" data-index="3">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 公司介绍板块 -->
+    <section class="company-intro" id="company">
+        <div class="section-header">
+            <p class="section-label">// MAGIC CHIP</p>
+            <h2 class="section-title">OUR COMPANY</h2>
+        </div>
+
+        <div class="company-content">
+            <div class="company-image">
+                <img src="https://placehold.co/800x600/1a1a1a/66FCF1?text=COMPANY+IMAGE" alt="Company Overview">
+            </div>
+            <div class="company-text">
+                <p class="company-code">> ESTABLISHED: 2024</p>
+                <h3 class="company-subtitle">Innovation at the Core</h3>
+                <p class="company-desc">
+                    Magic Chip is a leading technology company specializing in high-performance computing solutions.
+                    Our mission is to deliver cutting-edge mini PC products that combine power, efficiency, and elegant design.
+                    With a team of dedicated engineers and designers, we push the boundaries of what's possible in compact computing.
+                </p>
+                <p class="company-desc">
+                    From advanced thermal management to next-generation processors, every Magic Chip product is engineered
+                    with precision and passion. We believe in creating technology that empowers users to achieve more,
+                    whether for professional workloads, creative projects, or immersive entertainment.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心卖点网格 -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <p class="section-label">// Core Modules</p>
+            <h2 class="section-title">MINI PC PRODUCT</h2>
+        </div>
+
+        <div class="feature-grid">
+            <article class="feature-card">
+                <img src="https://placehold.co/600x375/1a1a1a/66FCF1?text=THERMAL+SYSTEM" alt="散热系统" class="feature-image">
+                <div class="feature-content">
+                    <p class="feature-code">> COOLING: LIQUID_METAL</p>
+                    <h3 class="feature-title">Thermal Control</h3>
+                    <p class="feature-desc">Advanced vapor chamber cooling with liquid metal thermal interface for sustained peak performance.</p>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <img src="https://placehold.co/600x375/1a1a1a/FFA500?text=CPU+CHIP" alt="处理器" class="feature-image">
+                <div class="feature-content">
+                    <p class="feature-code">> CPU: 16_CORE_32_THREAD</p>
+                    <h3 class="feature-title">Compute Core</h3>
+                    <p class="feature-desc">Next-gen architecture delivering workstation-class performance in a compact form factor.</p>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <img src="https://placehold.co/600x375/1a1a1a/66FCF1?text=GPU+MODULE" alt="显卡" class="feature-image">
+                <div class="feature-content">
+                    <p class="feature-code">> GPU: RTX_ON</p>
+                    <h3 class="feature-title">Graphics Engine</h3>
+                    <p class="feature-desc">Discrete GPU architecture enabling real-time ray tracing and AI-powered rendering.</p>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <img src="https://placehold.co/600x375/1a1a1a/FFA500?text=MEMORY" alt="内存" class="feature-image">
+                <div class="feature-content">
+                    <p class="feature-code">> RAM: 64GB_DDR5</p>
+                    <h3 class="feature-title">Memory Array</h3>
+                    <p class="feature-desc">High-speed DDR5 memory with ECC support for mission-critical operations.</p>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <img src="https://placehold.co/600x375/1a1a1a/66FCF1?text=STORAGE" alt="存储" class="feature-image">
+                <div class="feature-content">
+                    <p class="feature-code">> STORAGE: NVME_GEN4</p>
+                    <h3 class="feature-title">Data Vault</h3>
+                    <p class="feature-desc">Blazing-fast PCIe 4.0 NVMe SSDs in RAID configuration for ultimate data throughput.</p>
+                </div>
+            </article>
+
+            <article class="feature-card">
+                <img src="https://placehold.co/600x375/1a1a1a/FFA500?text=CONNECTIVITY" alt="连接性" class="feature-image">
+                <div class="feature-content">
+                    <p class="feature-code">> IO: FULL_SPECTRUM</p>
+                    <h3 class="feature-title">Interface Hub</h3>
+                    <p class="feature-desc">Thunderbolt 4, USB4, and 10GbE connectivity for maximum peripheral compatibility.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- 参数规格表 -->
+    <section class="specs" id="specs">
+        <div class="specs-container">
+            <div class="section-header">
+                <p class="section-label">// Technical Specifications</p>
+                <h2 class="section-title">System Parameters</h2>
+            </div>
+
+            <div class="specs-table-wrapper">
+                <table class="specs-table">
+                    <thead class="specs-header">
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Specification</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="specs-row">
+                            <td>PROCESSOR</td>
+                            <td class="spec-value">Intel Core i9-14900HX <span class="spec-unit">[24C/32T]</span></td>
+                            <td class="spec-value">ACTIVE</td>
+                        </tr>
+                        <tr class="specs-row">
+                            <td>GRAPHICS</td>
+                            <td class="spec-value">NVIDIA RTX 4070 <span class="spec-unit">[8GB GDDR6]</span></td>
+                            <td class="spec-value">ACTIVE</td>
+                        </tr>
+                        <tr class="specs-row">
+                            <td>MEMORY</td>
+                            <td class="spec-value">64GB <span class="spec-unit">[DDR5-5600]</span></td>
+                            <td class="spec-value">OPTIMAL</td>
+                        </tr>
+                        <tr class="specs-row">
+                            <td>STORAGE_1</td>
+                            <td class="spec-value">2TB <span class="spec-unit">[NVMe Gen4]</span></td>
+                            <td class="spec-value">MOUNTED</td>
+                        </tr>
+                        <tr class="specs-row">
+                            <td>STORAGE_2</td>
+                            <td class="spec-value">4TB <span class="spec-unit">[NVMe Gen4]</span></td>
+                            <td class="spec-value">MOUNTED</td>
+                        </tr>
+                        <tr class="specs-row">
+                            <td>NETWORK</td>
+                            <td class="spec-value">10GbE + WiFi 6E <span class="spec-unit">[2.5Gbps]</span></td>
+                            <td class="spec-value">LINK_UP</td>
+                        </tr>
+                        <tr class="specs-row">
+                            <td>DIMENSIONS</td>
+                            <td class="spec-value">195 × 180 × 45 <span class="spec-unit">[mm]</span></td>
+                            <td class="spec-value">VERIFIED</td>
+                        </tr>
+                        <tr class="specs-row">
+                            <td>WEIGHT</td>
+                            <td class="spec-value">1.2 <span class="spec-unit">[kg]</span></td>
+                            <td class="spec-value">CALIBRATED</td>
+                        </tr>
+                        <tr class="specs-row">
+                            <td>POWER</td>
+                            <td class="spec-value">330W <span class="spec-unit">[GaN Adapter]</span></td>
+                            <td class="spec-value">STABLE</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="table-hint">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                <span>Swipe horizontally to view full specifications</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </p>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-logo">Shenzhen Magic Chip Co., Ltd.</p>
+            <p class="footer-text">[ TRANSMISSION_COMPLETE // AWAITING_USER_INPUT ]</p>
+            <p class="footer-text">© 2026 Shenzhen Magic Chip Co., Ltd. ALL SYSTEMS OPERATIONAL.</p>
+        </div>
+        <div class="footer-bar"></div>
+    </footer>
+
+    <script>
+        // ========================================
+        // 时间码更新
+        // ========================================
+        function updateTimecode() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const frames = String(Math.floor(now.getMilliseconds() / 40)).padStart(2, '0');
+            document.getElementById('timecode').textContent = `${hours}:${minutes}:${seconds}:${frames}`;
+        }
+        setInterval(updateTimecode, 40);
+        updateTimecode();
+
+        // ========================================
+        // Hero 轮播图功能
+        // ========================================
+        const carouselSlides = document.querySelectorAll('.carousel-slide');
+        const progressBars = document.querySelectorAll('.progress-bar');
+        let currentSlide = 0;
+        let slideInterval;
+        const slideDuration = 5000; // 5秒切换
+
+        function goToSlide(index) {
+            // 移除当前激活状态
+            carouselSlides[currentSlide].classList.remove('active');
+            progressBars[currentSlide].classList.remove('active');
+            const oldFill = progressBars[currentSlide].querySelector('.progress-fill');
+            oldFill.style.animation = 'none';
+            oldFill.style.width = '0%';
+
+            // 更新索引
+            currentSlide = index;
+            if (currentSlide >= carouselSlides.length) {
+                currentSlide = 0;
+            }
+
+            // 添加新的激活状态
+            carouselSlides[currentSlide].classList.add('active');
+            progressBars[currentSlide].classList.add('active');
+
+            // 强制重新触发动画
+            const newFill = progressBars[currentSlide].querySelector('.progress-fill');
+            newFill.style.animation = 'none';
+            newFill.offsetHeight; // 触发重排
+            newFill.style.animation = '';
+        }
+
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+
+        function startCarousel() {
+            // 重置所有进度条
+            progressBars.forEach((bar, index) => {
+                const fill = bar.querySelector('.progress-fill');
+                fill.style.animation = 'none';
+                fill.style.width = '0%';
+                if (index === currentSlide) {
+                    bar.classList.add('active');
+                } else {
+                    bar.classList.remove('active');
+                }
+            });
+
+            // 强制重新触发当前进度条的动画
+            setTimeout(() => {
+                const currentFill = progressBars[currentSlide].querySelector('.progress-fill');
+                currentFill.style.animation = '';
+            }, 10);
+
+            // 启动自动播放
+            slideInterval = setInterval(nextSlide, slideDuration);
+        }
+
+        function stopCarousel() {
+            clearInterval(slideInterval);
+        }
+
+        // 点击进度条切换
+        progressBars.forEach((bar, index) => {
+            bar.addEventListener('click', () => {
+                stopCarousel();
+                goToSlide(index);
+                startCarousel();
+            });
+            
+            // 鼠标悬停暂停
+            bar.addEventListener('mouseenter', () => {
+                progressBars[currentSlide].classList.add('paused');
+            });
+            
+            bar.addEventListener('mouseleave', () => {
+                progressBars[currentSlide].classList.remove('paused');
+            });
+        });
+
+        // 启动轮播
+        startCarousel();
+
+        // 箭头按钮控制
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        prevBtn.addEventListener('click', () => {
+            stopCarousel();
+            let prevIndex = currentSlide - 1;
+            if (prevIndex < 0) {
+                prevIndex = carouselSlides.length - 1;
+            }
+            goToSlide(prevIndex);
+            startCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            stopCarousel();
+            goToSlide(currentSlide + 1);
+            startCarousel();
+        });
+
+        // ========================================
+        // 移动端菜单控制
+        // ========================================
+        const navToggle = document.getElementById('navToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        navToggle.addEventListener('click', openMobileMenu);
+        mobileMenuClose.addEventListener('click', closeMobileMenu);
+
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // 点击遮罩关闭
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target === mobileMenu) {
+                closeMobileMenu();
+            }
+        });
+
+        // ========================================
+        // 随机故障效果
+        // ========================================
+        function randomGlitch() {
+            const glitchTexts = document.querySelectorAll('.glitch-text');
+            const randomIndex = Math.floor(Math.random() * glitchTexts.length);
+            const target = glitchTexts[randomIndex];
+            
+            target.classList.add('glitch-active');
+            
+            setTimeout(() => {
+                target.classList.remove('glitch-active');
+            }, 300);
+        }
+
+        // 每 3-8 秒随机触发一次故障效果
+        function scheduleRandomGlitch() {
+            const delay = 3000 + Math.random() * 5000;
+            setTimeout(() => {
+                if (Math.random() > 0.3) {
+                    randomGlitch();
+                }
+                scheduleRandomGlitch();
+            }, delay);
+        }
+        scheduleRandomGlitch();
+
+        // ========================================
+        // 平滑滚动
+        // ========================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ========================================
+        // 图片懒加载效果
+        // ========================================
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '0';
+                    entry.target.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                    }, 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.feature-image').forEach(img => {
+            imageObserver.observe(img);
+        });
+
+        // ========================================
+        // 键盘导航支持
+        // ========================================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+
+        // ========================================
+        // 性能优化：减少动画的 will-change
+        // ========================================
+        const animatedElements = document.querySelectorAll('.feature-card, .hero-cta, .nav-link');
+        animatedElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                el.style.willChange = 'transform, box-shadow';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.willChange = 'auto';
+            });
+        });
+
+    </script>
+</body>
+</html>
