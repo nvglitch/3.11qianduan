@@ -872,14 +872,18 @@
 
         .feature-image {
             width: 100%;
-            aspect-ratio: 16/10;
+            aspect-ratio: 10/10;
             object-fit: cover;
             filter: grayscale(30%) contrast(1.1);
-            transition: filter var(--transition-normal);
+            transition: filter 0.5s ease-out, 
+                        transform 0.5s ease-out, 
+                        box-shadow 0.5s ease-out;
         }
 
         .feature-card:hover .feature-image {
             filter: grayscale(0%) contrast(1.2);
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(102, 252, 241, 0.3);
         }
 
         .feature-content {
@@ -1318,19 +1322,19 @@
 
         <div class="feature-grid reveal">
             <article class="feature-card reveal reveal-delay-1">
-                <img src="https://placehold.co/600x375/1a1a1a/66FCF1?text=THERMAL+SYSTEM" alt="散热系统" class="feature-image">
+                <img src="./assets/MCCN51.jpg" alt="散热系统" class="feature-image">
                 <div class="feature-content">
                     <p class="feature-code">> COOLING: LIQUID_METAL</p>
-                    <h3 class="feature-title">Thermal Control</h3>
+                    <h3 class="feature-title">MCCN51</h3>
                     <p class="feature-desc">Advanced vapor chamber cooling with liquid metal thermal interface for sustained peak performance.</p>
                 </div>
             </article>
 
             <article class="feature-card reveal reveal-delay-2">
-                <img src="https://placehold.co/600x375/1a1a1a/FFA500?text=CPU+CHIP" alt="处理器" class="feature-image">
+                <img src="./assets/MCIPC2-J5005.jpg" alt="处理器" class="feature-image">
                 <div class="feature-content">
                     <p class="feature-code">> CPU: 16_CORE_32_THREAD</p>
-                    <h3 class="feature-title">Compute Core</h3>
+                    <h3 class="feature-title">MCIPC2-J5005</h3>
                     <p class="feature-desc">Next-gen architecture delivering workstation-class performance in a compact form factor.</p>
                 </div>
             </article>
