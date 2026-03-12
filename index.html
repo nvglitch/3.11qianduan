@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="icon" href="assets/magic_chip_Logo_0197765d.png" type="image/png">
+    <link rel="icon" href="assets/magic chip Logo.png" type="image/png">
     <style>
         /* ========================================
            CSS 变量定义 - 视觉设计系统
@@ -1426,6 +1426,55 @@
             .rec-indicator {
                 display: none;
             }
+
+            /* 联系方式表格移动端优化 */
+            .specs-table-wrapper {
+                overflow-x: visible;
+                border: none;
+                background: transparent;
+            }
+
+            .specs-table {
+                min-width: auto;
+                display: block;
+            }
+
+            .specs-table thead {
+                display: none;
+            }
+
+            .specs-table tbody {
+                display: block;
+            }
+
+            .specs-row {
+                display: block;
+                margin-bottom: var(--space-sm);
+                background: var(--bg-card);
+                border: 1px solid var(--border-subtle);
+                border-radius: 8px;
+                padding: var(--space-sm);
+            }
+
+            .specs-row td {
+                display: block;
+                padding: var(--space-xs) 0;
+                white-space: normal;
+                word-break: break-word;
+                border-bottom: none;
+            }
+
+            .specs-row td:first-child {
+                font-weight: 600;
+                color: var(--accent-warning);
+                font-size: 0.75rem;
+                letter-spacing: 0.1em;
+                margin-bottom: var(--space-xs);
+            }
+
+            .specs-row td:last-child {
+                font-size: 0.9rem;
+            }
         }
 
         /* 触摸设备优化 */
@@ -1503,7 +1552,7 @@
         </button>
         <a href="#company" class="mobile-menu-link">Company</a>
         <a href="#features" class="mobile-menu-link">Products</a>
-        <a href="#specs" class="mobile-menu-link">Specs</a>
+        <a href="#contact" class="mobile-menu-link">Contact</a>
     </div>
 
     <!-- 产品轮播图区域 (Hero) -->
