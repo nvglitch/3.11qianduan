@@ -14,8 +14,8 @@
            ======================================== */
         :root {
             /* 核心颜色 */
-            --bg-dark: #0d0d0d;
-            --bg-secondary: #141414;
+            --bg-dark: #1a1a1f;
+            --bg-secondary: #24242a;
             --text-main: #e8e8e8;
             --text-muted: #999999;
             --accent-primary: #66FCF1;
@@ -34,8 +34,8 @@
             );
             
             /* 辅助色 */
-            --bg-card: rgba(20, 20, 20, 0.9);
-            --border-subtle: rgba(255, 255, 255, 0.08);
+            --bg-card: rgba(36, 36, 42, 0.9);
+            --border-subtle: rgba(255, 255, 255, 0.12);
             --border-glow: rgba(102, 252, 241, 0.4);
             --scanline: rgba(0, 0, 0, 0.4);
             
@@ -77,7 +77,8 @@
         }
 
         body {
-            background-color: var(--bg-dark);
+            background: linear-gradient(135deg, #1a1a1f 0%, #24242a 50%, #1a1a1f 100%);
+            background-attachment: fixed;
             color: var(--text-main);
             font-family: var(--font-mono);
             line-height: 1.7;
@@ -85,6 +86,23 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 全局背景光晕装饰 - 增强版 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse 100% 80% at 15% 20%, rgba(102, 252, 241, 0.08) 0%, transparent 55%),
+                radial-gradient(ellipse 80% 60% at 85% 30%, rgba(69, 183, 170, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse 120% 100% at 50% 100%, rgba(102, 252, 241, 0.05) 0%, transparent 60%),
+                radial-gradient(circle 40% at 25% 60%, rgba(255, 165, 0, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         /* 滚动条样式 */
@@ -125,7 +143,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: linear-gradient(180deg, rgba(13, 13, 13, 0.98) 0%, rgba(13, 13, 13, 0.9) 100%);
+            background: linear-gradient(180deg, rgba(26, 26, 31, 0.98) 0%, rgba(26, 26, 31, 0.9) 100%);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-subtle);
@@ -438,7 +456,7 @@
             justify-content: center;
         }
 
-        /* 动态背景网格 */
+        /* 动态背景网格 - 方案1: 青色主题柔和发光 */
         .product-carousel-section::before {
             content: '';
             position: absolute;
@@ -447,12 +465,32 @@
             right: 0;
             bottom: 0;
             background-image: 
-                linear-gradient(rgba(102, 252, 241, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(102, 252, 241, 0.03) 1px, transparent 1px);
+                linear-gradient(rgba(102, 252, 241, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(102, 252, 241, 0.15) 1px, transparent 1px);
             background-size: 50px 50px;
             animation: gridMove 20s linear infinite;
             pointer-events: none;
+            filter: drop-shadow(0 0 2px rgba(102, 252, 241, 0.3)) drop-shadow(0 0 4px rgba(102, 252, 241, 0.2));
         }
+
+        /* 动态背景网格 - 方案2: 青绿主题中等发光 (取消注释切换) */
+        /*
+        .product-carousel-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(69, 183, 170, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(69, 183, 170, 0.2) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+            filter: drop-shadow(0 0 3px rgba(69, 183, 170, 0.4)) drop-shadow(0 0 6px rgba(69, 183, 170, 0.25));
+        }
+        */
 
         @keyframes gridMove {
             0% { transform: translate(0, 0); }
@@ -641,9 +679,10 @@
         .company-intro {
             padding: var(--space-2xl) var(--container-padding);
             position: relative;
-            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(20, 20, 20, 0.8) 50%, var(--bg-dark) 100%);
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(36, 36, 42, 0.6) 50%, var(--bg-dark) 100%);
             border-top: 1px solid var(--border-subtle);
             border-bottom: 1px solid var(--border-subtle);
+            overflow: hidden;
         }
 
         .company-intro::before {
@@ -654,7 +693,21 @@
             right: 0;
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
-            opacity: 0.3;
+            opacity: 0.5;
+        }
+
+        /* Company Intro 光效氛围 */
+        .company-intro::after {
+            content: '';
+            position: absolute;
+            top: 30%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(102, 252, 241, 0.15) 0%, transparent 70%);
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .company-content {
@@ -754,6 +807,34 @@
         .features {
             padding: var(--space-2xl) var(--container-padding);
             position: relative;
+            overflow: hidden;
+        }
+
+        /* Features 光效氛围 */
+        .features::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: -5%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(69, 183, 170, 0.12) 0%, transparent 65%);
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .features::after {
+            content: '';
+            position: absolute;
+            bottom: -10%;
+            right: 10%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255, 165, 0, 0.08) 0%, transparent 60%);
+            filter: blur(70px);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .section-header {
@@ -1027,8 +1108,23 @@
            ======================================== */
         .specs {
             padding: var(--space-2xl) var(--container-padding);
-            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(20, 20, 20, 0.6) 50%, var(--bg-dark) 100%);
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(36, 36, 42, 0.5) 50%, var(--bg-dark) 100%);
             position: relative;
+            overflow: hidden;
+        }
+
+        /* Specs 光效氛围 */
+        .specs::after {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: -5%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(102, 252, 241, 0.1) 0%, transparent 65%);
+            filter: blur(70px);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .specs::before {
@@ -1365,7 +1461,7 @@
     <!-- 悬浮胶囊导航 -->
     <header class="header" id="header">
         <div class="brand">
-            <a href="#" class="logo">
+            <a href="#" class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
                 <img src="assets/logo.png" alt="Magic Chip">
             </a>
             <div class="rec-indicator">
@@ -1386,7 +1482,7 @@
             <div class="nav-links" id="navLinks">
                 <a href="#company" class="nav-link">Company</a>
                 <a href="#features" class="nav-link">Products</a>
-                <a href="#specs" class="nav-link">Specs</a>
+                <a href="#contact" class="nav-link">Contact</a>
             </div>
             <button class="nav-search" aria-label="搜索">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1567,68 +1663,42 @@
         </div>
     </section>
 
-    <!-- 参数规格表 -->
-    <section class="specs" id="specs">
+    <!-- 联系方式 -->
+    <section class="specs" id="contact">
         <div class="specs-container reveal">
             <div class="section-header">
-                <p class="section-label">// Technical Specifications</p>
-                <h2 class="section-title">System Parameters</h2>
+                <p class="section-label">// Contact Information</p>
+                <h2 class="section-title">Get In Touch</h2>
             </div>
 
             <div class="specs-table-wrapper">
                 <table class="specs-table">
                     <thead class="specs-header">
                         <tr>
-                            <th>Parameter</th>
-                            <th>Specification</th>
-                            <th>Status</th>
+                            <th>Contact Method</th>
+                            <th>Details</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="specs-row">
-                            <td>PROCESSOR</td>
-                            <td class="spec-value">Intel Core i9-14900HX <span class="spec-unit">[24C/32T]</span></td>
-                            <td class="spec-value">ACTIVE</td>
+                            <td>EMAIL</td>
+                            <td class="spec-value">contact@magicchip.com <span class="spec-unit">[Business]</span></td>
                         </tr>
                         <tr class="specs-row">
-                            <td>GRAPHICS</td>
-                            <td class="spec-value">NVIDIA RTX 4070 <span class="spec-unit">[8GB GDDR6]</span></td>
-                            <td class="spec-value">ACTIVE</td>
+                            <td>PHONE</td>
+                            <td class="spec-value">+86 755 8888 8888 <span class="spec-unit">[Mon-Fri 9:00-18:00]</span></td>
                         </tr>
                         <tr class="specs-row">
-                            <td>MEMORY</td>
-                            <td class="spec-value">64GB <span class="spec-unit">[DDR5-5600]</span></td>
-                            <td class="spec-value">OPTIMAL</td>
+                            <td>ADDRESS</td>
+                            <td class="spec-value">Shenzhen, China <span class="spec-unit">[Headquarters]</span></td>
                         </tr>
                         <tr class="specs-row">
-                            <td>STORAGE_1</td>
-                            <td class="spec-value">2TB <span class="spec-unit">[NVMe Gen4]</span></td>
-                            <td class="spec-value">MOUNTED</td>
+                            <td>WECHAT</td>
+                            <td class="spec-value">MagicChip_Official <span class="spec-unit">[Official Account]</span></td>
                         </tr>
                         <tr class="specs-row">
-                            <td>STORAGE_2</td>
-                            <td class="spec-value">4TB <span class="spec-unit">[NVMe Gen4]</span></td>
-                            <td class="spec-value">MOUNTED</td>
-                        </tr>
-                        <tr class="specs-row">
-                            <td>NETWORK</td>
-                            <td class="spec-value">10GbE + WiFi 6E <span class="spec-unit">[2.5Gbps]</span></td>
-                            <td class="spec-value">LINK_UP</td>
-                        </tr>
-                        <tr class="specs-row">
-                            <td>DIMENSIONS</td>
-                            <td class="spec-value">195 × 180 × 45 <span class="spec-unit">[mm]</span></td>
-                            <td class="spec-value">VERIFIED</td>
-                        </tr>
-                        <tr class="specs-row">
-                            <td>WEIGHT</td>
-                            <td class="spec-value">1.2 <span class="spec-unit">[kg]</span></td>
-                            <td class="spec-value">CALIBRATED</td>
-                        </tr>
-                        <tr class="specs-row">
-                            <td>POWER</td>
-                            <td class="spec-value">330W <span class="spec-unit">[GaN Adapter]</span></td>
-                            <td class="spec-value">STABLE</td>
+                            <td>LINKEDIN</td>
+                            <td class="spec-value">Shenzhen Magic Chip <span class="spec-unit">[Company Page]</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -1638,7 +1708,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
-                <span>Swipe horizontally to view full specifications</span>
+                <span>We look forward to hearing from you</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
